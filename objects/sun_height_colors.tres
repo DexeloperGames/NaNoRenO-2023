@@ -1,0 +1,8 @@
+[gd_resource type="GradientTexture1D" load_steps=2 format=3 uid="uid://c0cj0by1e1hb0"]
+
+[ext_resource type="Gradient" uid="uid://djlypjfir7af0" path="res://objects/sun_height_gradient.tres" id="1_lsa87"]
+
+[resource]
+gradient = ExtResource("1_lsa87")
+width = 360
+use_hdr = true

@@ -1,4 +1,6 @@
-[gd_resource type="VisualShader" load_steps=4 format=3 uid="uid://bkcf75iqspjdf"]
+[gd_resource type="VisualShader" load_steps=8 format=3 uid="uid://bkcf75iqspjdf"]
+
+[ext_resource type="Script" path="res://shaders/custom nodes/blender_fresnel.gd" id="1_iavgc"]
 
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_415mk"]
 constant = 1.0
@@ -8,14 +10,49 @@ constant = 1.0
 [sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_x3m3h"]
 constant = 1.0
 
+[sub_resource type="VisualShaderNodeCustom" id="VisualShaderNodeCustom_g4m1d"]
+default_input_values = [0, 1.45]
+initialized = true
+script = ExtResource("1_iavgc")
+
+[sub_resource type="VisualShaderNodeFloatConstant" id="VisualShaderNodeFloatConstant_ua0xs"]
+constant = 0.5
+
+[sub_resource type="VisualShaderNodeMix" id="VisualShaderNodeMix_e7dw3"]
+
 [resource]
 code = "shader_type spatial;
-render_mode blend_add;
+render_mode blend_add, shadows_disabled;
 
 
 
+// Fresnel
+#include \"res://shaders/includes/fresnel.gdshaderinc\"
 
 void fragment() {
+// FloatConstant:6
+	float n_out6p0 = 0.500000;
+
+
+	float n_out5p0;
+// Fresnel:5
+	float n_in5p0 = 1.45000;
+	{
+		
+				vec3 N = normalize(NORMAL);
+				vec3 V = VIEW;
+		
+				float eta = max(n_in5p0, 0.00001);
+				n_out5p0 = fresnel_dielectric(V, N, (FRONT_FACING) ? eta : 1.0 / eta);
+			
+	}
+
+
+// Mix:7
+	float n_in7p1 = 1.00000;
+	float n_out7p0 = mix(n_out6p0, n_in7p1, n_out5p0);
+
+
 // FloatConstant:2
 	float n_out2p0 = 1.000000;
 
@@ -29,6 +66,7 @@ void fragment() {
 
 
 // Output:0
+	ALBEDO = vec3(n_out7p0);
 	METALLIC = n_out2p0;
 	ROUGHNESS = n_out3p0;
 	SPECULAR = n_out4p0;
@@ -36,13 +74,20 @@ void fragment() {
 
 }
 "
-graph_offset = Vector2(-109.294, -72.4201)
+graph_offset = Vector2(-271.38, 24.5106)
 modes/blend = 1
-nodes/fragment/0/position = Vector2(420, 120)
+flags/shadows_disabled = true
+nodes/fragment/0/position = Vector2(660, 80)
 nodes/fragment/2/node = SubResource("VisualShaderNodeFloatConstant_415mk")
-nodes/fragment/2/position = Vector2(100, 280)
+nodes/fragment/2/position = Vector2(160, 160)
 nodes/fragment/3/node = SubResource("VisualShaderNodeFloatConstant_rp2lh")
-nodes/fragment/3/position = Vector2(20, 200)
+nodes/fragment/3/position = Vector2(200, 280)
 nodes/fragment/4/node = SubResource("VisualShaderNodeFloatConstant_x3m3h")
-nodes/fragment/4/position = Vector2(140, 100)
-nodes/fragment/connections = PackedInt32Array(2, 0, 0, 2, 3, 0, 0, 3, 4, 0, 0, 4)
+nodes/fragment/4/position = Vector2(120, 340)
+nodes/fragment/5/node = SubResource("VisualShaderNodeCustom_g4m1d")
+nodes/fragment/5/position = Vector2(-240, 160)
+nodes/fragment/6/node = SubResource("VisualShaderNodeFloatConstant_ua0xs")
+nodes/fragment/6/position = Vector2(-260, 60)
+nodes/fragment/7/node = SubResource("VisualShaderNodeMix_e7dw3")
+nodes/fragment/7/position = Vector2(120, -20)
+nodes/fragment/connections = PackedInt32Array(2, 0, 0, 2, 3, 0, 0, 3, 4, 0, 0, 4, 5, 0, 7, 2, 6, 0, 7, 0, 7, 0, 0, 0)
