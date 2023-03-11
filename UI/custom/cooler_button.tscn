@@ -1,0 +1,48 @@
+[gd_scene load_steps=5 format=3 uid="uid://dj12bv2h8h2om"]
+
+[ext_resource type="Shader" uid="uid://b1yhbb664hcy" path="res://UI/custom/cooler_button_shader.tres" id="1_gir6n"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i8uue"]
+shader = ExtResource("1_gir6n")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1eup4"]
+shader = ExtResource("1_gir6n")
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_dvic8"]
+size = Vector2(5, 5)
+
+[node name="CoolerButton" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 3.0
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "yeah man"
+flat = true
+
+[node name="ColorRect" type="ColorRect" parent="."]
+visible = false
+show_behind_parent = true
+material = SubResource("ShaderMaterial_i8uue")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_right = -1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+show_behind_parent = true
+material = SubResource("ShaderMaterial_1eup4")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("PlaceholderTexture2D_dvic8")
